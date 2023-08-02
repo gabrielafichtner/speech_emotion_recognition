@@ -1,8 +1,6 @@
 # Speech Emotion Recognition
 This project explores the use of deep learning in speech emotion recognition.
-Speech emotion recognition serves many valuable purposes, such as ensuring the safety of individuals by checking their sobriety and capability to drive, as well as assessing mental health to determine a person's readiness for specific tasks. It can be useful when evaluating the performance of client interactions to improve client support calls and save clients from lengthy questionairies. 
-
-This could lead to a more dynamic feedback to learn some best practices, identify the level of satisfaction and make clients free of lengthy questionairies.
+Speech emotion recognition serves many valuable purposes, such as ensuring the safety of individuals by checking their sobriety and capability to drive, as well as assessing mental health to determine a person's readiness for specific tasks. It can be useful when evaluating the performance of client interactions to improve client support calls and save clients from lengthy questionairies. This could lead to a more dynamic feedback to learn some best practices, identify the level of satisfaction and make clients free of lengthy questionairies.
 
 With this purpose, the dataset used in this project was the RAVDESS dataset that can be found <[here](https://zenodo.org/record/1188976)>.
 The RAVDESS is one of the most used and most complete databases for emotion recognition. There are 60 audios of 24 different actors (male and female) expressing 8 different emotions: calm, happy, angry, disgust, neutral, sad, fearful and surprised.
