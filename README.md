@@ -1,6 +1,6 @@
 # Speech Emotion Recognition
 This project explores the use of deep learning in speech emotion recognition.
-Speech emotion recognition serves many valuable purposes, such as ensuring the safety of individuals by checking their sobriety and capability to drive, as well as assessing mental health to determine a person's readiness for specific tasks. It can be useful when evaluating the performance of client interactions to improve client support calls. 
+Speech emotion recognition serves many valuable purposes, such as ensuring the safety of individuals by checking their sobriety and capability to drive, as well as assessing mental health to determine a person's readiness for specific tasks. It can be useful when evaluating the performance of client interactions to improve client support calls and save clients from lengthy questionairies. 
 
 This could lead to a more dynamic feedback to learn some best practices, identify the level of satisfaction and make clients free of lengthy questionairies.
 
