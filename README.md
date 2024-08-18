@@ -1,31 +1,44 @@
 # Speech Emotion Recognition
-This project explores the use of deep learning in speech emotion recognition.
-Speech emotion recognition serves many valuable purposes, such as ensuring the safety of individuals by checking their sobriety and capability to drive, as well as assessing mental health to determine a person's readiness for specific tasks. It can be useful when evaluating the performance of client interactions to improve client support calls and save clients from lengthy questionairies. This could lead to a more dynamic feedback to learn some best practices, identify the level of satisfaction and make clients free of lengthy questionairies.
+## Project Overview
+Audio classification, particularly in the context of speech emotion recognition, plays a critical role in various real-world applications. From enhancing client interactions in call centers to assessing an individual's capability to perform crucial tasks such as driving, the ability to accurately detect and interpret emotions or mental state from speech can have significant implications. For instance, detecting stress or fatigue in a driver’s voice could trigger alerts to prevent accidents, while understanding customer emotions can help tailor responses in service industries, leading to improved satisfaction.
 
-With this purpose, the dataset used in this project was the RAVDESS dataset that can be found <[here](https://zenodo.org/record/1188976)>.
-The RAVDESS is one of the most used and most complete databases for emotion recognition. There are 60 audios of 24 different actors (male and female) expressing 8 different emotions: calm, happy, angry, disgust, neutral, sad, fearful and surprised.
+## Dataset
+This project explores the application of deep learning techniques to speech emotion recognition, aiming to develop a model capable of identifying emotions based on a person's voice. The model is trained using the [RAVDESS dataset](https://zenodo.org/record/1188976), which includes 1,440 audio recordings from 24 actors, each contributing 60 trials across eight distinct emotions: neutral, calm, happy, sad, angry, fearful, disgust, and surprised. The emotions have two intensities, with the exception of 'neutral,' which is presented with a single intensity.
 
-Some characteristics of the data set, as the length and the amplitude (loudness) of the audio were shown and the need to manipulate this when modelling were discussed and later adressed. The dataset extracted was unbalanced, neutral represented 6.6% and other emotions represented 13.3% each. This can be overcome later with data augmentation, such as adding noise, shitfing and stretching the audio in time. This was not explored in the project, and the baseline was considered to be 13.3%.
+## Audio Analysis with Librosa
+Librosa, a popular Python library for audio analysis, is utilized in this project to load and process the audio files. Key audio characteristics such as length and loudness are extracted to be further selected to analyze manipulations in the audios. Librosa processes audio files as numpy time series arrays, with absolute values representing the loudness of the audio, and their respective sample rates. Sample rate is the frequency data is captured, the audios of the dataset presented values per second. Audios had durations ranging from 2.9 to 5.3 seconds.
 
-## Data Dictionary
-||Type|Dataset|Description|
-|---|---|---|---|
-|file|object|files_details|file path| 
-|length|int|files_details|Length of the audio| 
-|seconds|float|files_details|Seconds of the audio| 
-|sample_rate|int|files_details|Sample rate of audio| 
-|emotions|object|files_details|Emotion of the audio| 
-|label|int|files_details|Label of the audio| 
-|len_trim|int|files_details|Length of the audio - trimmed| 
-|max_amp|float|files_details|Maximum Amplitude of file| 
+- Trimming Silence: Librosa's trim function is used to remove silence from the recordings, applying different thresholds to determine the optimal balance between data reduction and information retention.
 
-## Preprocess - Librosa Library
-Librosa was used to load the files and preprocess them to create the input of the deep learning models: the melspectrograms. This can be considered as the image of the file and it can serve as an input to convolutional neural networks. Librosa first loads the audio as numpy array with its sample rate. Sample rate is the number of measurements per second the audio has (every file in this dataset had 22050).
-- 1: Setting a threshold of 30db below reference to be considered as silence. This was done because not all audio is relevant content to be considered, this can lead to smaller inputs and faster models without losing information.
-- 2: Setting the numpy array to a size of 88200 values, which corresponds to 4s of audio. This is more than enough to extract the information for speech recognition purposes in this project. Longer audios were trimmed and shorter ones were padded with zeros (silence).
-- 3: The signal was transformed to a melspectrogram. Sounds are composed by different frequencies with different amplitudes along time. Spectrograms show the strength of the frequencis along time. Melspectrograms take into account how humans perceive frequencies.
-- 4: This strength of frequency is represented by the amplitude (loudness) and it was converted to dB (decibel). The decibel scale take into account how humans perceive loudness.
+- Downsampling: The sample rate is reduced from 48,000 Hz to 22,500 Hz to decrease data size without compromising audio quality significantly.
 
-The melspectrograms were the input of a convolutional neural network. The final model had 2 convolutional 2D layers and some layers to avoid overfitting.
-It reached an accuracy of 60% on validation data, a great improvement from the baseline 13.3%.
-Further, this can be improved with the incoporation of more datasets, with different actors, statements and emotions and data augmentation to make the model more robust to changes of the sound and of the spectrograms. It is worth noting that speech emotion recognition is very subjective, people express and sense emotions differently and there are many more than 8. However, this model can be used to assess how positive the client call experience was and improve their interactions.
+- Cutting and Padding: To standardize the dataset for model training, the audio files are adjusted to a uniform length by truncating longer files and padding shorter ones with zeros.
+
+- Mel Spectrogram Conversion: The preprocessed audio time series are converted into mel spectrograms, which visually represent frequency patterns over time. These 2D representations serve as input for the neural network model.
+
+# Model Development
+A Convolutional Neural Network (CNN) is chosen for this task due to its efficacy in processing image-like data, such as mel spectrograms. Two versions of the model are created: one with bias initialization and one without.
+
+## Training and Validation
+Initial Results: Both models showed similar performance in the first epoch, achieving over 90% accuracy on the training and validation sets. The model without bias initialization slightly outperformed the other in terms of validation loss.
+
+## Final Model Selection
+Based on the validation performance, the model without bias initialization was selected for further training on the entire dataset.
+
+## Model Performance
+The model performed well on the training and validation sets, correctly predicting emotions with over 90% accuracy. However, it struggled with unseen data, particularly misclassifying emotions such as anger and sadness. This indicates that while the model effectively learns from the provided dataset, it has difficulty generalizing to new, diverse inputs.
+
+## Challenges and Observations
+- Ambiguity in Emotion Recognition: Some audio samples presented challenges, as emotions like "sad" and "calm" were difficult to distinguish. This reflects the complexity of real-world emotion recognition, where expressions are often subtle and context-dependent.
+
+- Dataset Limitations: The dataset consists of scripted phrases, which may not capture the full range of emotional expression found in natural speech. This limitation could affect the model's performance in real-world applications.
+
+## Future Directions
+To improve the model's robustness and generalization:
+
+- Expand the Dataset: Training on a larger and more diverse dataset, including various voices and unscripted statements, could enhance the model's ability to handle real-world scenarios.
+
+- Data Augmentation: Implementing data augmentation techniques, such as pitch shifting or time-stretching, could help the model better generalize to different speech variations.
+
+## Conclusion
+This project demonstrates the potential of deep learning for speech emotion recognition, achieving high accuracy on the training and validation sets. However, the challenges with unseen data highlight the need for further research and development to create a model that can reliably perform in diverse, real-world applications.
